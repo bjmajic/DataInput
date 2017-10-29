@@ -7,10 +7,6 @@ BaseData::BaseData(bool bUseNetFile /*= false*/, unsigned int nThreadLoadNum /*=
 	m_ThreadProcess = new CThreadForWin32();
 #endif
 
-	pLoadFun = nullptr;
-	pProcessFun = nullptr;
-	pLoadFunParam = nullptr;
-	pProcessFunParam = nullptr;
 }
 
 BaseData::~BaseData()
@@ -34,19 +30,14 @@ BaseData::~BaseData()
 
 bool BaseData::Run()
 {
-	if (pLoadFun != nullptr && pProcessFun != nullptr)
-	{
-		for (int i = 0; i < m_nThreadLoadNum; i++)
-		{
-			m_vecThreadLoad[i]->Start(pLoadFun, pLoadFunParam);
-		}
+	ThreadFunInfo threadInfo;
+	ThreadFunInfo.pFuntion = &BaseData::LoadFun;
+	ThreadFunInfo.pParam = this;
 
-		m_ThreadProcess->Start(pProcessFun, pProcessFunParam);
-
-		return true;
-	}
-	else
+	for (int i = 0; i < m_nThreadLoadNum; i++)
 	{
-		return false;
+		m_vecThreadLoad[i]->Start(StartLoad, this);
 	}
+
+	m_ThreadProcess->Start(StartProcess);
 }

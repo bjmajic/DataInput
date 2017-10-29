@@ -16,18 +16,24 @@ CThreadForWin32::~CThreadForWin32()
 	Join(INFINITE);
 }
 
-unsigned int CThreadForWin32::Start(void* pFun, void* pParam)
+bool CThreadForWin32::Start(pCallBack callback_fun)
 {
 	DWORD threadID;
 	HANDLE hThread;
-	pThreadFun threadFun = (pThreadFun)pFun;
+	if (callback_fun == nullptr)
+	{
+		return false;
+	}
 
-	hThread = CreateThread(NULL, 0, threadFun, pParam, 0, &threadID);
+	//pThreadFun threadFun = (pThreadFun)pFun;
+	//m_pCallBackFun = pCallBackFun;
+
+	hThread = CreateThread(NULL, 0, StartFun, callback_fun, 0, &threadID);
 	//return (unsigned int)hThread;
 	hThreadHandle = hThread;
 	dThreadID = threadID;
-	
-	return 0;
+
+	return true;
 }
 
 unsigned int CThreadForWin32::Join(unsigned int nTime)
@@ -44,4 +50,14 @@ unsigned int CThreadForWin32::Join(unsigned int nTime)
 	}
 	
 	return (unsigned int)retVal;
+}
+
+DWORD WINAPI CThreadForWin32::StartFun(LPVOID pParam)
+{
+	//m_FunInfo.pClassObj = threadFunInfo.pClassObj;
+	//m_FunInfo.pFuntion = threadFunInfo.pFuntion;
+	//m_FunInfo.pParam = threadFunInfo.pParam;
+	pCallBack threadFun = (pCallBack)pParam;
+	//CThreadForWin32* pThread = (CThreadForWin32*)pParam;
+	return threadFun();
 }

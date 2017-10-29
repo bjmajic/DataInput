@@ -14,13 +14,13 @@ class BaseData
 public:
 	BaseData(bool bUseNetFile = false, unsigned int nThreadLoadNum = 1);
 	virtual ~BaseData();
+
+	virtual int LoadFun();
+	virtual int ProcessFun();
+
+	friend int StartLoad(){ return LoadFun(); }
+	friend int StartProcess(){ return ProcessFun(); }
 	
-#ifdef _WIN32
-	virtual void SetLoadFun(pThreadFun pFun) = 0;
-	virtual void SetLoadFunParam(LPVOID pParam) = 0;
-	virtual void SetProcessFun(pThreadFun pFun) = 0;
-	virtual void SetProcessFunParam(LPVOID pParam) = 0;
-#endif
 	bool Run();
 protected:
 	std::vector<IThread*> m_vecThreadLoad;
@@ -29,11 +29,5 @@ protected:
 	bool m_bUseNetFile;
 	int  m_nThreadLoadNum;
 
-#ifdef _WIN32
-	pThreadFun pLoadFun;
-	pThreadFun pProcessFun;
-	LPVOID     pLoadFunParam;
-	LPVOID     pProcessFunParam;
-#endif
 };
 

@@ -19,7 +19,7 @@ void main()
 	its_auto_lock seclock(mylock);
 	CThreadForWin32 myThread;
 	
-	myThread.Start(MyFun, 0);
+	/*myThread.Start(MyFun, 0);
 	myThread.Join(INFINITE);
-	ImageDateType* imageDAta = new ImageDateType;
+	ImageDateType* imageDAta = new ImageDateType;*/
 }
